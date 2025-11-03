@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diabetes Prediction</title>
+</head>
+<body>
+    <h2>Diabetes Prediction Form</h2>
+    <form id="diabetes-form">
+        <label>Pregnancies: <input type="number" name="Pregnancies" required></label><br>
+        <label>Glucose: <input type="number" name="Glucose" required></label><br>
+        <label>Blood Pressure: <input type="number" name="BloodPressure" required></label><br>
+        <label>Skin Thickness: <input type="number" name="SkinThickness" required></label><br>
+        <label>Insulin: <input type="number" name="Insulin" required></label><br>
+        <label>BMI: <input type="number" step="0.1" name="BMI" required></label><br>
+        <label>Diabetes Pedigree Function: <input type="number" step="0.01" name="DiabetesPedigreeFunction" required></label><br>
+        <label>Age: <input type="number" name="Age" required></label><br>
+        <button type="submit">Predict</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        document.getElementById('diabetes-form').onsubmit = async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = {
+                Pregnancies: parseInt(form.Pregnancies.value),
+                Glucose: parseFloat(form.Glucose.value),
+                BloodPressure: parseFloat(form.BloodPressure.value),
+                SkinThickness: parseFloat(form.SkinThickness.value),
+                Insulin: parseFloat(form.Insulin.value),
+                BMI: parseFloat(form.BMI.value),
+                DiabetesPedigreeFunction: parseFloat(form.DiabetesPedigreeFunction.value),
+                Age: parseInt(form.Age.value)
+            };
+            const res = await fetch('/predict', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            document.getElementById('result').innerText = result.result;
+        };
+    </script>
+</body>
+</html>
